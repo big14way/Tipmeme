@@ -3,7 +3,10 @@ class TipMemeExtension {
     constructor() {
         this.wallet = null;
         this.userAccount = null;
-        this.contractAddress = '0x072a452b7469b98df2f4cdc7677b160b4f71fd3c9d8a24a93662e4ee63e2db9e';
+        this.contractAddress = CONFIG.TIPMEME_CONTRACT_ADDRESS;
+        this.rpcUrl = CONFIG.STARKNET_RPC_URL;
+        this.network = CONFIG.NETWORK;
+        this.paymasterUrl = CONFIG.PAYMASTER_SERVICE_URL;
         this.tokenPrices = {
             'ETH': 2400,
             'STRK': 0.85,
@@ -13,10 +16,28 @@ class TipMemeExtension {
     }
 
     async init() {
+        this.updateContractInfo();
         await this.loadTwitterHandle();
         await this.checkConnection();
         this.setupEventListeners();
         this.generateMeme();
+    }
+
+    updateContractInfo() {
+        // Update contract address display
+        const contractElement = document.getElementById('contractAddress');
+        if (contractElement && this.contractAddress) {
+            const shortAddress = this.contractAddress.slice(0, 6) + '...' + this.contractAddress.slice(-4);
+            contractElement.textContent = shortAddress;
+            contractElement.title = this.contractAddress; // Show full address on hover
+        }
+
+        // Update network info
+        const networkElement = document.getElementById('networkInfo');
+        if (networkElement && this.network) {
+            const networkName = this.network === 'sepolia' ? 'Starknet Sepolia Testnet' : `Starknet ${this.network}`;
+            networkElement.textContent = networkName;
+        }
     }
 
     setupEventListeners() {

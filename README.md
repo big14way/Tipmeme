@@ -8,22 +8,25 @@ TipMeme is a comprehensive platform that combines a **Chrome browser extension**
 
 ## 🌟 **Platform Components**
 
-### 🚀 **Chrome Extension** ✅ **WALLET INTEGRATION WORKING**
+### 🚀 **Chrome Extension** ✅ **FULLY WORKING**
 - **Direct Twitter Integration**: Seamlessly tip content creators on Twitter profiles
 - **Cyberpunk UI**: Beautiful neon-themed interface with animations
 - **Multi-Wallet Support**: 
-  - ✅ **ArgentX (Ready Wallet)** - Fully supported
-  - ✅ **Braavos** - Fully supported
+  - ✅ **ArgentX (Ready Wallet)** - Fully supported & tested
+  - ✅ **Braavos** - Fully supported & tested
   - **Auto-detection with retry logic** for reliable wallet connections
 - **Real-time Conversion**: Live USD price display for tips
 - **Secure Script Injection**: Runs in main world context for proper wallet access
+- **Configuration System**: Centralized config for contract addresses and settings
 
-### 📊 **Creator Dashboard**  
-- **Earnings Analytics**: Comprehensive charts and statistics
+### 📊 **Creator Dashboard** ✅ **FULLY WORKING**
+- **Wallet Connection**: Working ArgentX and Braavos integration
+- **Contract Integration**: Connected to deployed TipMeme contract
+- **Earnings Analytics**: Comprehensive charts and statistics  
 - **Tip Leaderboards**: See top tippers and trending content
 - **Withdrawal Panel**: Easy fund management and withdrawals
 - **Transaction History**: Complete audit trail of all tips received
-- **Starknet Integration**: Direct wallet connection and contract interaction
+- **Extension Demo**: Live preview of Chrome extension functionality
 
 ---
 
@@ -45,6 +48,7 @@ TipMeme is a comprehensive platform that combines a **Chrome browser extension**
 - **Network**: Starknet Sepolia Testnet
 - **Explorer**: [View on Starkscan](https://sepolia.starkscan.co/contract/0x072a452b7469b98df2f4cdc7677b160b4f71fd3c9d8a24a93662e4ee63e2db9e)
 - **Status**: ✅ Deployed & Verified
+- **RPC URL**: `https://starknet-sepolia.public.blastapi.io/rpc/v0_8`
 
 ---
 
@@ -58,11 +62,14 @@ git clone https://github.com/big14way/Tipmeme.git
 cd Tipmeme
 
 # Install dependencies
-npm install --legacy-peer-deps
+npm install
 
 # Start development server
 npm run dev
 ```
+
+Dashboard will be available at: `http://localhost:3000`
+Extension demo at: `http://localhost:3000/extension-demo`
 
 ### **2. Chrome Extension Setup**
 
@@ -101,9 +108,17 @@ tipmeme-platform/
 │   └── 🔧 providers.tsx             # Starknet providers
 ├── 🧩 components/                   # Reusable components
 │   ├── 📊 dashboard/                # Dashboard components
+│   │   ├── 💰 gasless-withdraw.tsx  # Withdrawal functionality
+│   │   ├── 🔐 login-section.tsx     # Wallet connection
+│   │   └── ... other dashboard components
 │   └── 🎨 ui/                       # shadcn/ui components
+├── 📚 lib/                          # Shared libraries
+│   ├── ⚙️ contract-config.ts        # Contract configuration
+│   ├── 💸 paymaster.ts              # Gasless transactions
+│   └── 🛠️ utils.ts                   # Utility functions
 ├── 🌐 chrome-extension/             # Browser Extension
 │   ├── 📄 manifest.json             # Extension manifest
+│   ├── ⚙️ config.js                 # Extension configuration
 │   ├── 🔧 background.js             # Service worker
 │   ├── 📝 content-script.js         # Twitter integration
 │   ├── 🎨 popup.html                # Extension popup
@@ -134,14 +149,17 @@ tipmeme-platform/
   - **Debug information** for troubleshooting
 - **⚡ Real-time Updates**: Live USD conversion and transaction status
 - **🔍 Advanced Debugging**: Built-in wallet detection testing
+- **⚙️ Centralized Configuration**: Contract addresses and settings in `config.js`
 
-### **Creator Dashboard Features**
+### **Creator Dashboard Features** ✅
 
+- **🔐 Wallet Connection**: Working integration with ArgentX and Braavos
 - **📈 Analytics Overview**: Comprehensive earnings and tip statistics
 - **🏆 Leaderboards**: See top tippers and most popular content
 - **💰 Withdrawal Management**: Easy fund withdrawals and balance tracking
 - **📊 Charts & Graphs**: Visual representation of earnings over time
 - **📜 Transaction History**: Complete audit trail of all transactions
+- **🎮 Extension Preview**: Live demo of Chrome extension functionality
 
 ---
 
@@ -152,9 +170,12 @@ tipmeme-platform/
 ```bash
 # Debug wallet connections
 1. Load extension in Chrome
-2. Navigate to http://localhost:8080/chrome-extension/debug-wallets.html
+2. Navigate to chrome-extension/debug-wallets.html
 3. Test wallet detection and connection
 4. Check extension popup functionality
+
+# Note: If you see CSS selector errors, reload the extension:
+# chrome://extensions/ → Find TipMeme → Click reload button
 ```
 
 ### **Smart Contract Testing**
@@ -175,10 +196,10 @@ starkli deploy <class_hash> <constructor_args>
 npm run dev
 
 # Test all dashboard features
-1. Connect wallet
-2. View analytics
-3. Test withdrawal panel
-4. Check transaction history
+1. Visit http://localhost:3000
+2. Connect wallet (ArgentX or Braavos)
+3. View analytics and withdraw panel
+4. Check extension demo at /extension-demo
 ```
 
 ---
@@ -201,32 +222,55 @@ scarb fmt                # Format Cairo code
 # 1. Load chrome-extension/ folder in Chrome DevTools
 # 2. Use debug-wallets.html for wallet testing
 # 3. Check console for detailed logging
+# 4. Reload extension after changes: chrome://extensions/
 ```
 
 ---
 
-## 📊 **Latest Updates**
+## 📊 **Latest Updates (January 2025)**
 
-### **Wallet Integration (December 2024)** ✅
-- **Fixed wallet detection**: Now properly detects ArgentX (Ready Wallet) and Braavos
-- **Script injection improvements**: Added `world: 'MAIN'` for proper wallet access
-- **Retry logic**: Handles timing issues with wallet initialization
-- **Debug tools**: Enhanced logging and debug-wallets.html testing tool
+### **🎯 Configuration & Contract Integration** ✅
+- **Centralized Configuration**: 
+  - `chrome-extension/config.js` for extension settings
+  - `lib/contract-config.ts` for dashboard settings
+- **Contract Integration**: All components now use deployed contract
+- **Working Wallet Detection**: Fixed ArgentX and Braavos integration
 
-### **Code Cleanup**
-- **Removed unnecessary files**: test-extension.js, backup files
-- **Updated .gitignore**: Comprehensive exclusions for development files
-- **Streamlined structure**: Focused on essential components only
+### **🐛 Bug Fixes & Improvements** ✅
+- **Fixed Extension Demo**: Resolved SSR issues with Next.js
+- **CSS Selector Fix**: Removed invalid `:has-text()` selectors
+- **Wallet Connection**: Improved reliability and error handling
+- **UI Consistency**: Updated contract addresses across all components
+
+### **🛠️ Development Experience**
+- **Better Error Handling**: Clear error messages and debugging info
+- **Updated README**: Comprehensive setup and testing instructions
+- **Working Development Setup**: All services properly configured
 
 ---
 
 ## 🔗 **Important Links**
 
 - 📊 **Contract Explorer**: [Starkscan](https://sepolia.starkscan.co/contract/0x072a452b7469b98df2f4cdc7677b160b4f71fd3c9d8a24a93662e4ee63e2db9e)
+- 🎮 **Extension Demo**: [http://localhost:3000/extension-demo](http://localhost:3000/extension-demo)
+- 📈 **Creator Dashboard**: [http://localhost:3000](http://localhost:3000)
 - 🦊 **ArgentX Wallet**: [Chrome Store](https://chrome.google.com/webstore/detail/argent-x/dlcobpjiigpikoobohmabehhmhfoodbb)
 - 🛡️ **Braavos Wallet**: [Chrome Store](https://chrome.google.com/webstore/detail/braavos-starknet-wallet/jnlgamecbpmbajjfhmmmlhejkemejdma)
 - 💧 **STRK Faucet**: [Get Test Tokens](https://starknet-faucet.vercel.app/)
 - 🌐 **Starknet Docs**: [Documentation](https://docs.starknet.io/)
+
+---
+
+## 🚦 **Status Overview**
+
+| Component | Status | Description |
+|-----------|--------|-------------|
+| 🎯 Smart Contract | ✅ Working | Deployed on Starknet Sepolia |
+| 🌐 Chrome Extension | ✅ Working | Wallet integration complete |
+| 📊 Creator Dashboard | ✅ Working | Full wallet & contract integration |
+| 🎮 Extension Demo | ✅ Working | Live preview functionality |
+| 🔐 Wallet Connection | ✅ Working | ArgentX & Braavos supported |
+| ⚙️ Configuration | ✅ Working | Centralized config system |
 
 ---
 
@@ -258,4 +302,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **🎉 Ready to revolutionize social media tipping? Let's build the future together!**
 
-*Last updated: December 2024 - Wallet Integration Complete ✅* 
+*Last updated: January 2025 - Full Platform Integration Complete ✅* 

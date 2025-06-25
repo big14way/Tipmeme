@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Zap, ExternalLink, CheckCircle, AlertCircle } from 'lucide-react';
 import { paymasterService } from '@/lib/paymaster';
+import { CONTRACT_CONFIG } from '@/lib/contract-config';
 
 interface WithdrawStatus {
   type: 'idle' | 'estimating' | 'signing' | 'sponsoring' | 'success' | 'error';
@@ -73,7 +74,7 @@ export function GaslessWithdraw() {
     setStatus({ type: 'signing', message: 'Please sign the transaction...' });
 
     try {
-      const contractAddress = '0x072a452b7469b98df2f4cdc7677b160b4f71fd3c9d8a24a93662e4ee63e2db9e';
+      const contractAddress = CONTRACT_CONFIG.ADDRESS;
       
       setStatus({ type: 'sponsoring', message: 'Processing sponsored transaction...' });
 

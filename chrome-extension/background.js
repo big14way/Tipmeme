@@ -206,10 +206,26 @@ class TipMemeBackground {
     }
 
     async setDefaultConfig() {
+        // Import config if available
+        let config;
+        try {
+            // Dynamic import for config
+            const configModule = await import('./config.js');
+            config = configModule.CONFIG;
+        } catch (e) {
+            // Fallback to hardcoded values if config.js is not available
+            config = {
+                TIPMEME_CONTRACT_ADDRESS: '0x072a452b7469b98df2f4cdc7677b160b4f71fd3c9d8a24a93662e4ee63e2db9e',
+                STARKNET_RPC_URL: 'https://starknet-sepolia.public.blastapi.io/rpc/v0_8',
+                NETWORK: 'sepolia',
+                PAYMASTER_SERVICE_URL: 'http://localhost:3001'
+            };
+        }
+
         const defaultConfig = {
             registryContractAddress: '0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7',
-                          starknetRpcUrl: 'https://starknet-sepolia.public.blastapi.io/rpc/v0_8',
-            tipMemeContractAddress: '0x072a452b7469b98df2f4cdc7677b160b4f71fd3c9d8a24a93662e4ee63e2db9e',
+            starknetRpcUrl: config.STARKNET_RPC_URL,
+            tipMemeContractAddress: config.TIPMEME_CONTRACT_ADDRESS,
             defaultTipAmount: '1',
             preferredTokens: ['ETH', 'STRK'],
             showNotifications: true,

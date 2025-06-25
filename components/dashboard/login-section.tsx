@@ -4,15 +4,19 @@ import { useConnect, useDisconnect } from '@starknet-react/core';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wallet, TrendingUp, Users, Gift } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export function LoginSection() {
   const { connect, connectors, isPending, error } = useConnect();
   const { disconnect } = useDisconnect();
-
   useEffect(() => {
     console.log('Available connectors:', connectors);
-    console.log('Connectors details:', connectors.map(c => ({ id: c.id, name: c.name, available: c.available() })));
+    console.log('Connectors details:', connectors.map(c => ({
+      id: c.id,
+      name: c.name,
+      available: c.available(),
+      type: c.constructor.name
+    })));
   }, [connectors]);
 
   const handleConnect = async (connector: any) => {
@@ -25,18 +29,18 @@ export function LoginSection() {
     }
   };
 
-  const getWalletDisplayName = (connectorId: string) => {
+  const getWalletDisplayName = (connectorId: string): string => {
     switch (connectorId) {
       case 'argentX':
         return 'ArgentX';
       case 'braavos':
         return 'Braavos';
       default:
-        return connectorId;
+        return connectorId || 'Unknown Wallet';
     }
   };
 
-  const getWalletIcon = (connectorId: string) => {
+  const getWalletIcon = (connectorId: string): string => {
     switch (connectorId) {
       case 'argentX':
         return '🦊';
@@ -46,6 +50,8 @@ export function LoginSection() {
         return '👛';
     }
   };
+
+
 
   return (
     <div className="container mx-auto px-4 py-16">
@@ -117,11 +123,9 @@ export function LoginSection() {
               <div className="bg-red-50 border border-red-200 rounded-lg p-3">
                 <p className="text-red-600 text-sm font-medium">Connection Error:</p>
                 <p className="text-red-500 text-sm">
-                  {(() => {
-                    if (typeof error === 'string') return error;
-                    if (error instanceof Error) return error.message;
-                    return 'Unknown error occurred';
-                  })()}
+                  {typeof error === 'string' ? error : 
+                   error instanceof Error ? error.message : 
+                   'Unknown error occurred'}
                 </p>
               </div>
             )}
@@ -132,20 +136,17 @@ export function LoginSection() {
                   <Button 
                     key={connector.id}
                     onClick={() => handleConnect(connector)}
-                    disabled={isPending || !connector.available()}
+                    disabled={false}
                     className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                     size="lg"
                   >
                     <span className="mr-2 text-lg">{getWalletIcon(connector.id)}</span>
                     <Wallet className="mr-2 h-5 w-5" />
                     {isPending ? 'Connecting...' : `Connect ${getWalletDisplayName(connector.id)}`}
-                    {!connector.available() && (
-                      <span className="ml-2 text-xs bg-orange-500 px-2 py-1 rounded">Not Available</span>
-                    )}
                   </Button>
                 ))}
                 <p className="text-xs text-gray-500 text-center">
-                  Found {connectors.length} connector(s). Check browser console for debug info.
+                  Found {connectors.length} connector(s). Click to connect!
                 </p>
               </div>
             ) : (

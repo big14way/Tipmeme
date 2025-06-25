@@ -183,8 +183,7 @@ class TipMemeTwitterIntegration {
             '[data-testid="placementTracking"] div[role="button"]', // Follow button
             'div[aria-label*="Follow"]', // Follow button by aria-label
             'div[data-testid="userActions"]', // User actions container
-            'div[role="button"]:has-text("Follow")', // Generic follow button
-            'div[role="button"]:has-text("Following")', // Following button
+            'div[role="button"]', // Generic button elements
         ];
 
         for (const selector of selectors) {

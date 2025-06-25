@@ -1,4 +1,82 @@
-import ChromeExtensionPopup from "../../chrome-extension/popup"
+'use client';
+
+import React from 'react';
+
+const ChromeExtensionPopup = () => {
+  return (
+    <div className="w-80 bg-gray-900 text-white font-sans">
+      <div className="p-4 border-b border-gray-700">
+        <div className="flex items-center justify-between mb-2">
+          <h1 className="text-lg font-bold text-transparent bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text">
+            TipMeme
+          </h1>
+          <span className="text-xs text-gray-400">v1.0</span>
+        </div>
+        <div className="contract-info text-xs text-gray-400">
+          <div>Contract: <span className="text-cyan-400">0x072a...db9e</span></div>
+          <div>Network: <span className="text-green-400">Starknet Sepolia Testnet</span></div>
+        </div>
+      </div>
+
+      <div className="p-4 space-y-4">
+        {/* Connection Status */}
+        <div className="text-center">
+          <div className="text-sm text-yellow-400 mb-2">🟡 Wallet Not Connected</div>
+          <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-all duration-300">
+            Connect ArgentX 🦊
+          </button>
+        </div>
+
+        {/* Twitter Handle */}
+        <div className="bg-gray-800 p-3 rounded-lg">
+          <div className="text-xs text-gray-400 mb-1">Tip to</div>
+          <div className="text-lg font-bold text-blue-400">@ethereum</div>
+        </div>
+
+        {/* Amount Input */}
+        <div className="space-y-2">
+          <label className="text-xs text-gray-400">Amount</label>
+          <div className="flex space-x-2">
+            <input 
+              type="number" 
+              placeholder="0.01"
+              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm"
+              disabled
+            />
+            <select className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm" disabled>
+              <option>ETH</option>
+              <option>STRK</option>
+              <option>USDC</option>
+            </select>
+          </div>
+          <div className="text-xs text-gray-400">≈ $24.00</div>
+        </div>
+
+        {/* Meme Preview */}
+        <div className="bg-gray-800 rounded-lg p-3 text-center min-h-[80px] flex items-center justify-center">
+          <div className="text-center">
+            <div className="text-2xl mb-2">🚀💎🌙</div>
+            <div className="text-sm font-bold">TO THE MOON!</div>
+            <div className="text-xs text-gray-400">Much Tip, Very Crypto</div>
+          </div>
+        </div>
+
+        {/* Send Button */}
+        <button 
+          className="w-full bg-gray-700 text-gray-500 py-3 px-4 rounded-lg text-sm font-medium cursor-not-allowed"
+          disabled
+        >
+          🎁 Send Tip
+        </button>
+
+        {/* Status */}
+        <div className="text-xs text-center text-gray-500">
+          Connect wallet to start tipping
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default function ExtensionDemo() {
   return (
