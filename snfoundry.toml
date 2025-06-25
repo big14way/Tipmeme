@@ -1,0 +1,13 @@
+[sncast.default]
+account = "tipmeme_account"
+accounts-file = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+
+[sncast.testnet]
+account = "tipmeme_account"
+accounts-file = "~/.starknet_accounts/starknet_open_zeppelin_accounts.json"
+
+[sncast.mainnet]
+# URL will be specified via command line when needed
+
+[snforge.default]
+# Add any snforge-specific configurations here if needed 

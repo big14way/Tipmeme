@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wallet Debug - TipMeme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #f5f5f5;
+        }
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .warning { color: #ffc107; }
+        .info { color: #17a2b8; }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+        }
+        button:hover { background: #0056b3; }
+        .wallet-info {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Wallet Detection Debug Tool</h1>
+    
+    <div class="debug-section">
+        <h2>Step 1: Basic Window Objects</h2>
+        <button onclick="checkBasicObjects()">Check Basic Objects</button>
+        <div id="basicResults"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Step 2: Comprehensive Wallet Scan</h2>
+        <button onclick="scanAllWallets()">Scan All Wallets</button>
+        <div id="walletResults"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Step 3: Trigger Wallet Events</h2>
+        <button onclick="triggerWalletEvents()">Trigger Discovery Events</button>
+        <div id="eventResults"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Step 4: Test Connection</h2>
+        <button onclick="testBraavosConnection()">Test Braavos Connection</button>
+        <button onclick="testArgentConnection()">Test ArgentX Connection</button>
+        <div id="connectionResults"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>Extension Information</h2>
+        <div id="extensionInfo"></div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            console.log(`[${type.toUpperCase()}]`, message);
+        }
+
+        function displayResult(elementId, content, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="${type}">${content}</div>`;
+        }
+
+        function checkBasicObjects() {
+            const results = [];
+            
+            // Check basic window objects
+            const basicChecks = [
+                'window.starknet',
+                'window.starknet_braavos', 
+                'window.braavos',
+                'window.starknet_argentX',
+                'window.argentX',
+                'window.starknet_ready',
+                'window.ready',
+                'window.starknet_argent',
+                'window.argent'
+            ];
+
+            results.push('<h3>Basic Object Checks:</h3>');
+            
+            basicChecks.forEach(check => {
+                const obj = eval(check);
+                if (obj) {
+                    results.push(`✅ ${check}: Found (${typeof obj})`);
+                    if (obj.id) results.push(`&nbsp;&nbsp;&nbsp;ID: ${obj.id}`);
+                    if (obj.name) results.push(`&nbsp;&nbsp;&nbsp;Name: ${obj.name}`);
+                } else {
+                    results.push(`❌ ${check}: Not found`);
+                }
+            });
+
+            // Check for any starknet-related objects
+            results.push('<h3>Dynamic Starknet Objects:</h3>');
+            const starknetObjects = [];
+            for (const key in window) {
+                if (key.includes('starknet') || key.includes('braavos') || key.includes('argent')) {
+                    starknetObjects.push(key);
+                }
+            }
+            
+            if (starknetObjects.length > 0) {
+                starknetObjects.forEach(key => {
+                    results.push(`🔍 Found: window.${key} (${typeof window[key]})`);
+                });
+            } else {
+                results.push('❌ No starknet-related objects found in window');
+            }
+
+            displayResult('basicResults', results.join('<br>'));
+        }
+
+        function scanAllWallets() {
+            const results = [];
+            const wallets = [];
+            
+            // Comprehensive wallet detection
+            const patterns = [
+                { key: 'starknet', name: 'Starknet Wallet' },
+                { key: 'starknet_braavos', name: 'Braavos' },
+                { key: 'braavos', name: 'Braavos' },
+                { key: 'starknet_argentX', name: 'ArgentX' },
+                { key: 'argentX', name: 'ArgentX' },
+                { key: 'starknet_ready', name: 'Ready Wallet' },
+                { key: 'ready', name: 'Ready Wallet' },
+                { key: 'starknet_argent', name: 'ArgentX Legacy' },
+                { key: 'argent', name: 'ArgentX Legacy' }
+            ];
+
+            results.push('<h3>Wallet Detection Results:</h3>');
+
+            patterns.forEach(pattern => {
+                try {
+                    const wallet = window[pattern.key];
+                    if (wallet && typeof wallet === 'object') {
+                        const hasEnable = typeof wallet.enable === 'function';
+                        const hasRequest = typeof wallet.request === 'function';
+                        const hasAccount = wallet.account !== undefined;
+                        
+                        if (hasEnable || hasRequest || hasAccount) {
+                            wallets.push({
+                                key: pattern.key,
+                                name: pattern.name,
+                                wallet: wallet
+                            });
+                            
+                            results.push(`<div class="wallet-info">
+                                <strong>✅ ${pattern.name} (${pattern.key})</strong><br>
+                                ID: ${wallet.id || 'unknown'}<br>
+                                Enable method: ${hasEnable ? '✅' : '❌'}<br>
+                                Request method: ${hasRequest ? '✅' : '❌'}<br>
+                                Account property: ${hasAccount ? '✅' : '❌'}<br>
+                                Connected: ${wallet.isConnected || wallet.selectedAddress ? '✅' : '❌'}
+                            </div>`);
+                        }
+                    }
+                } catch (e) {
+                    results.push(`❌ Error checking ${pattern.name}: ${e.message}`);
+                }
+            });
+
+            if (wallets.length === 0) {
+                results.push('<div class="error">❌ No compatible wallets found</div>');
+                
+                // Additional debugging
+                results.push('<h3>Chrome Extension Debug:</h3>');
+                results.push(`User Agent: ${navigator.userAgent}<br>`);
+                results.push(`Location: ${window.location.href}<br>`);
+                results.push(`Is Chrome: ${!!window.chrome}<br>`);
+                results.push(`Extensions: ${Object.keys(window.chrome?.runtime || {}).length} API(s) available<br>`);
+            } else {
+                results.push(`<div class="success">✅ Found ${wallets.length} compatible wallet(s)</div>`);
+            }
+
+            displayResult('walletResults', results.join(''));
+        }
+
+        function triggerWalletEvents() {
+            const results = [];
+            const events = [
+                'eip6963:requestProvider',
+                'starknet:requestProvider',
+                'starknet_requestProvider',
+                'braavos:requestProvider',
+                'argentx:requestProvider',
+                'ready:requestProvider',
+                'argent:requestProvider'
+            ];
+
+            results.push('<h3>Triggering Wallet Discovery Events:</h3>');
+
+            events.forEach(eventName => {
+                try {
+                    window.dispatchEvent(new Event(eventName));
+                    window.dispatchEvent(new CustomEvent(eventName));
+                    results.push(`✅ Dispatched: ${eventName}`);
+                } catch (e) {
+                    results.push(`❌ Failed to dispatch ${eventName}: ${e.message}`);
+                }
+            });
+
+            results.push('<br><div class="info">⏳ Wait a moment, then run "Scan All Wallets" again to see if any new wallets appeared.</div>');
+
+            displayResult('eventResults', results.join('<br>'));
+        }
+
+        async function testBraavosConnection() {
+            const results = [];
+            
+            try {
+                results.push('<h3>Testing Braavos Connection:</h3>');
+                
+                // Find Braavos wallet
+                const wallet = window.starknet_braavos || window.braavos || 
+                             (window.starknet && window.starknet.id === 'braavos' ? window.starknet : null);
+                
+                if (!wallet) {
+                    results.push('<div class="error">❌ Braavos wallet not found</div>');
+                    displayResult('connectionResults', results.join(''));
+                    return;
+                }
+
+                results.push(`✅ Found Braavos wallet: ${wallet.id || 'unknown id'}`);
+                
+                // Test connection
+                let accounts = null;
+                if (wallet.enable) {
+                    results.push('🔄 Trying enable() method...');
+                    accounts = await wallet.enable();
+                } else if (wallet.request) {
+                    results.push('🔄 Trying request() method...');
+                    accounts = await wallet.request({ method: 'wallet_requestAccounts' });
+                }
+
+                if (accounts && accounts.length > 0) {
+                    results.push(`<div class="success">✅ Connected! Address: ${accounts[0]}</div>`);
+                } else {
+                    results.push('<div class="warning">⚠️ Connection returned no accounts</div>');
+                }
+
+            } catch (error) {
+                results.push(`<div class="error">❌ Connection failed: ${error.message}</div>`);
+            }
+
+            displayResult('connectionResults', results.join('<br>'));
+        }
+
+        async function testArgentConnection() {
+            const results = [];
+            
+            try {
+                results.push('<h3>Testing ArgentX Connection:</h3>');
+                
+                // Find ArgentX wallet
+                const wallet = window.starknet_argentX || window.argentX || 
+                             window.starknet_ready || window.ready ||
+                             (window.starknet && (window.starknet.id === 'argentX' || window.starknet.id === 'ready') ? window.starknet : null);
+                
+                if (!wallet) {
+                    results.push('<div class="error">❌ ArgentX wallet not found</div>');
+                    displayResult('connectionResults', results.join(''));
+                    return;
+                }
+
+                results.push(`✅ Found ArgentX wallet: ${wallet.id || 'unknown id'}`);
+                
+                // Test connection
+                let accounts = null;
+                if (wallet.enable) {
+                    results.push('🔄 Trying enable() method...');
+                    accounts = await wallet.enable();
+                } else if (wallet.request) {
+                    results.push('🔄 Trying request() method...');
+                    accounts = await wallet.request({ method: 'wallet_requestAccounts' });
+                }
+
+                if (accounts && accounts.length > 0) {
+                    results.push(`<div class="success">✅ Connected! Address: ${accounts[0]}</div>`);
+                } else {
+                    results.push('<div class="warning">⚠️ Connection returned no accounts</div>');
+                }
+
+            } catch (error) {
+                results.push(`<div class="error">❌ Connection failed: ${error.message}</div>`);
+            }
+
+            displayResult('connectionResults', results.join('<br>'));
+        }
+
+        // Show extension information
+        window.addEventListener('load', () => {
+            const info = [];
+            info.push(`<strong>Page URL:</strong> ${window.location.href}`);
+            info.push(`<strong>User Agent:</strong> ${navigator.userAgent}`);
+            info.push(`<strong>Chrome Available:</strong> ${!!window.chrome}`);
+            info.push(`<strong>Extensions API:</strong> ${!!window.chrome?.runtime}`);
+            
+            document.getElementById('extensionInfo').innerHTML = info.join('<br>');
+        });
+    </script>
+</body>
+</html> 

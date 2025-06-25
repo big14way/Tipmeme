@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TipMeme - Crypto Tips for Twitter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 380px;
+            min-height: 600px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 30%, #16213e 70%, #0f3460 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .neon-glow {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 0, 255, 0.1) 0%, rgba(0, 255, 255, 0.05) 50%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .container {
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff00ff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbow 4s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 0, 255, 0.8);
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @keyframes rainbow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .twitter-handle {
+            color: #00ffff;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            display: inline-block;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(0, 255, 255, 0.8); }
+            to { text-shadow: 0 0 20px rgba(0, 255, 255, 1), 0 0 30px rgba(0, 255, 255, 0.8); }
+        }
+
+        .status-bar {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 8px 12px;
+            margin-bottom: 20px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-online {
+            color: #00ff00;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+        }
+
+        .status-offline {
+            color: #ff0000;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.8);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ff00ff;
+            font-weight: 600;
+            text-shadow: 0 0 8px rgba(255, 0, 255, 0.6);
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ff00ff;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #00ffff;
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.7);
+            transform: scale(1.02);
+            background: rgba(0, 20, 40, 0.9);
+        }
+
+        .form-control option {
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        .amount-group {
+            display: flex;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .amount-input {
+            flex: 1;
+        }
+
+        .usd-display {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-weight: bold;
+            min-width: 90px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+            font-size: 16px;
+            color: #000;
+        }
+
+        .wallet-buttons {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .wallet-btn {
+            flex: 1;
+            padding: 14px 10px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wallet-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .wallet-btn:hover::before {
+            left: 100%;
+        }
+
+        .wallet-btn.argentx {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+        }
+
+        .wallet-btn.braavos {
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            color: white;
+            box-shadow: 0 0 20px rgba(108, 92, 231, 0.5);
+        }
+
+        .wallet-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 255, 255, 0.4);
+        }
+
+        .wallet-btn.connected {
+            background: linear-gradient(45deg, #00ff00, #32ff32);
+            color: #000;
+            box-shadow: 0 0 25px rgba(0, 255, 0, 0.6);
+        }
+
+        .meme-preview {
+            width: 100%;
+            height: 160px;
+            border: 2px solid #ffff00;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(255, 255, 0, 0.4);
+        }
+
+        .meme-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+        }
+
+        .meme-placeholder {
+            color: #ffff00;
+            font-size: 14px;
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        .meme-generated {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #6c5ce7, #ff006e, #ffbe0b);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .meme-generated::before {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+        }
+
+        .meme-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .meme-emoji {
+            font-size: 32px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .meme-text {
+            color: #ffff00;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .meme-subtext {
+            color: #00ffff;
+            font-size: 12px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 24px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #00ffff;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00);
+            background-size: 300% 100%;
+            animation: progressShine 2s linear infinite;
+            width: 0%;
+            transition: width 0.8s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { background-position: -300% 0; }
+            100% { background-position: 300% 0; }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 12px;
+            color: #00ffff;
+            font-weight: bold;
+            font-size: 14px;
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+
+        .tip-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tip-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+
+        .tip-btn:hover::before {
+            left: 100%;
+        }
+
+        .tip-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(255, 0, 255, 0.8);
+        }
+
+        .tip-btn:active {
+            transform: translateY(-2px);
+        }
+
+        .tip-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+        }
+
+        .tip-btn:disabled::before {
+            display: none;
+        }
+
+        .status-message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+            font-size: 13px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .status-success {
+            background: rgba(0, 255, 0, 0.2);
+            border: 2px solid #00ff00;
+            color: #00ff00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+
+        .status-error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 2px solid #ff0000;
+            color: #ff0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .contract-info {
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        .contract-address {
+            color: #00ffff;
+            font-family: monospace;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #ff00ff, #00ffff);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00);
+        }
+    </style>
+</head>
+<body>
+    <div class="neon-glow"></div>
+    <div class="container">
+        <div class="header">
+            <h1>TipMeme</h1>
+            <div class="subtitle">Crypto Tips for Twitter</div>
+        </div>
+
+        <div class="status-bar">
+            <span id="connectionStatus" class="status-offline">🔴 Disconnected</span>
+            <span id="networkInfo">Starknet Sepolia</span>
+        </div>
+
+        <div class="header">
+            <h1>Tip <span class="twitter-handle" id="twitterHandle">@loading...</span></h1>
+        </div>
+
+        <div class="form-group">
+            <label for="tokenSelect">Select Token 🚀</label>
+            <select id="tokenSelect" class="form-control">
+                <option value="">Choose your weapon...</option>
+                <option value="0x049d36570d4e46f48e99674bd3fcc84644ddd6b96f7c741b1562b82f9e004dc7" data-symbol="ETH">Ethereum (ETH) 💎</option>
+                <option value="0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d" data-symbol="STRK">Starknet Token (STRK) ⚡</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="amountInput">Amount 💸</label>
+            <div class="amount-group">
+                <div class="amount-input">
+                    <input type="number" id="amountInput" class="form-control" placeholder="Enter amount" step="0.001" min="0">
+                </div>
+                <div class="usd-display" id="usdDisplay">$0.00</div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="recipientAddress">Recipient Handle 🎯</label>
+            <input type="text" id="recipientHandle" class="form-control" placeholder="@username">
+        </div>
+
+        <div class="meme-preview" id="memePreview">
+            <div class="meme-placeholder">
+                🎭 Generating epic meme...<br>
+                <small>Powered by AI ✨</small>
+            </div>
+        </div>
+
+        <div class="wallet-buttons">
+            <button class="wallet-btn argentx" id="argentxBtn">ArgentX 🦊</button>
+            <button class="wallet-btn braavos" id="braavosBtn">Braavos 🛡️</button>
+        </div>
+
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text" id="progressText">Preparing transaction...</div>
+        </div>
+
+        <button class="tip-btn" id="tipBtn" disabled>
+            🚀 Send Tip to the Moon! 🌙
+        </button>
+
+        <div class="status-message" id="statusMessage"></div>
+
+        <div class="contract-info">
+            Contract: <span class="contract-address">0x072a...db9e</span><br>
+            Network: Starknet Sepolia Testnet
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>
