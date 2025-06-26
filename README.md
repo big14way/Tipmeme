@@ -9,7 +9,7 @@ TipMeme is a comprehensive platform that combines a **Chrome browser extension**
 ## 🌐 **Live Deployments**
 
 ### **🚀 Production Dashboard**
-- **Live URL**: [https://tipmeme-5yvnz4vep-big14ways-projects.vercel.app](https://tipmeme-5yvnz4vep-big14ways-projects.vercel.app)
+- **Live URL**: [https://tipmeme-5yvnz4vep-big14ways-projects.vercel.app](https://tipmeme.vercel.app/)
 - **Platform**: Vercel
 - **Status**: ✅ **LIVE & OPERATIONAL**
 
