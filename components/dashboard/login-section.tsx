@@ -119,7 +119,7 @@ export function LoginSection() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {error && (
+            {error ? (
               <div className="bg-red-50 border border-red-200 rounded-lg p-3">
                 <p className="text-red-600 text-sm font-medium">Connection Error:</p>
                 <p className="text-red-500 text-sm">
@@ -128,7 +128,7 @@ export function LoginSection() {
                    'Unknown error occurred'}
                 </p>
               </div>
-            )}
+            ) : null}
             
             {connectors.length > 0 ? (
               <div className="space-y-3">

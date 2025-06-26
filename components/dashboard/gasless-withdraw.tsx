@@ -79,7 +79,7 @@ export function GaslessWithdraw() {
       setStatus({ type: 'sponsoring', message: 'Processing sponsored transaction...' });
 
       const result = await paymasterService.completeSponsoredWithdraw(
-        account,
+        account as any,
         handle,
         contractAddress
       );

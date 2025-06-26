@@ -74,3 +74,22 @@ temp/
 
 # Keep deployment docs but not temporary deployment files
 deployment-info.json 
+.vercel
+.env*.local
+
+# Demo and testing files that shouldn't be in production
+demo-recording/
+tipmeme-extension.zip
+paymaster-demo.js
+validate-paymaster-live.js
+test-paymaster-validation.js
+chrome-extension/mock-twitter-test.html
+chrome-extension/run-tests.sh
+
+# Scripts directory package files (keep docs but ignore npm packages)
+scripts/node_modules/
+scripts/package-lock.json
+
+# Testing and validation reports (generated files)
+*validation-report*.md
+*testing-guide*.md

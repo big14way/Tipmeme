@@ -6,6 +6,28 @@ TipMeme is a comprehensive platform that combines a **Chrome browser extension**
 
 ---
 
+## 🌐 **Live Deployments**
+
+### **🚀 Production Dashboard**
+- **Live URL**: [https://tipmeme-5yvnz4vep-big14ways-projects.vercel.app](https://tipmeme-5yvnz4vep-big14ways-projects.vercel.app)
+- **Platform**: Vercel
+- **Status**: ✅ **LIVE & OPERATIONAL**
+
+### **🔧 Paymaster Service**
+- **Live URL**: [https://tipmeme-paymaster.onrender.com](https://tipmeme-paymaster.onrender.com)
+- **Platform**: Render.com
+- **Status**: ✅ **LIVE & OPERATIONAL**
+- **Health Check**: `/health` endpoint available
+- **Features**: Gasless transactions, rate limiting, comprehensive logging
+
+### **📱 Chrome Extension**
+- **Version**: 1.0.0
+- **Status**: ✅ **PACKAGED & READY**
+- **File**: Available as `tipmeme-extension.zip`
+- **Installation**: Load unpacked in Chrome Developer Mode
+
+---
+
 ## 🌟 **Platform Components**
 
 ### 🚀 **Chrome Extension** ✅ **FULLY WORKING**
@@ -28,6 +50,14 @@ TipMeme is a comprehensive platform that combines a **Chrome browser extension**
 - **Transaction History**: Complete audit trail of all tips received
 - **Extension Demo**: Live preview of Chrome extension functionality
 
+### ⚡ **Paymaster Service** ✅ **FULLY OPERATIONAL**
+- **Gasless Transactions**: Sponsor user transactions for seamless UX
+- **Rate Limiting**: 10 requests per minute per IP for security
+- **Multi-token Support**: ETH and STRK sponsorship
+- **Comprehensive Logging**: Detailed transaction monitoring
+- **Health Monitoring**: Real-time service status checks
+- **Production Ready**: Deployed with Docker on Render.com
+
 ---
 
 ## 🛠 **Tech Stack**
@@ -39,6 +69,8 @@ TipMeme is a comprehensive platform that combines a **Chrome browser extension**
 - **Charts**: Chart.js + Recharts  
 - **Wallet**: Starknet React + ArgentX/Braavos
 - **Extension**: Manifest V3 + Content Scripts
+- **Backend**: Node.js + Express (Paymaster Service)
+- **Deployment**: Vercel (Frontend) + Render.com (Backend)
 
 ---
 
@@ -54,7 +86,20 @@ TipMeme is a comprehensive platform that combines a **Chrome browser extension**
 
 ## 🚀 **Quick Start**
 
-### **1. Setup Development Environment**
+### **1. Try Live Platform**
+
+```bash
+# Visit Live Dashboard
+https://tipmeme-5yvnz4vep-big14ways-projects.vercel.app
+
+# Download Chrome Extension
+1. Download tipmeme-extension.zip
+2. Extract files
+3. Load in Chrome Developer Mode
+4. Start tipping on Twitter!
+```
+
+### **2. Setup Development Environment**
 
 ```bash
 # Clone the repository
@@ -71,7 +116,7 @@ npm run dev
 Dashboard will be available at: `http://localhost:3000`
 Extension demo at: `http://localhost:3000/extension-demo`
 
-### **2. Chrome Extension Setup**
+### **3. Chrome Extension Setup**
 
 ```bash
 # Load the extension in Chrome
@@ -82,7 +127,7 @@ Extension demo at: `http://localhost:3000/extension-demo`
 5. Extension will auto-detect ArgentX and Braavos wallets
 ```
 
-### **3. Wallet Setup**
+### **4. Wallet Setup**
 
 ```bash
 # Install Required Wallets
@@ -132,6 +177,11 @@ tipmeme-platform/
 ├── 🧪 tests/                        # Contract tests
 ├── 📜 scripts/                      # Deployment scripts
 ├── 🛠️ paymaster-service/            # Gasless transaction service
+│   ├── 🐳 Dockerfile                # Container configuration
+│   ├── 🔧 server.js                 # Main server file
+│   ├── 🛣️ routes/sponsor.js         # Sponsorship endpoints
+│   ├── 🛡️ middleware/               # Rate limiting & validation
+│   └── 📚 README.md                 # Service documentation
 └── 📋 DEPLOYMENT_GUIDE.md           # Production deployment guide
 ```
 
@@ -160,6 +210,38 @@ tipmeme-platform/
 - **📊 Charts & Graphs**: Visual representation of earnings over time
 - **📜 Transaction History**: Complete audit trail of all transactions
 - **🎮 Extension Preview**: Live demo of Chrome extension functionality
+
+### **Paymaster Service Features** ✅
+
+- **⚡ Gasless Transactions**: Users can send tips without paying gas fees
+- **🔒 Rate Limiting**: 10 requests per minute per IP for security
+- **💰 Multi-token Support**: Supports both ETH and STRK sponsorship
+- **📊 Comprehensive Logging**: Detailed logs for monitoring and debugging
+- **🏥 Health Monitoring**: `/health` endpoint for service status checks
+- **🛡️ Input Validation**: Robust validation for all transaction parameters
+- **🌐 CORS Support**: Configured for frontend integration
+
+---
+
+## 🌐 **API Endpoints**
+
+### **Paymaster Service**
+```
+Base URL: https://tipmeme-paymaster.onrender.com
+
+GET  /health                 # Service health check
+POST /sponsor               # Sponsor a transaction
+```
+
+### **Health Check Response**
+```json
+{
+  "status": "healthy",
+  "timestamp": "2024-01-XX",
+  "service": "tipmeme-paymaster",
+  "uptime": "XX seconds"
+}
+```
 
 ---
 
@@ -198,108 +280,92 @@ npm run dev
 # Test all dashboard features
 1. Visit http://localhost:3000
 2. Connect wallet (ArgentX or Braavos)
-3. View analytics and withdraw panel
-4. Check extension demo at /extension-demo
+3. Test tip functionality with extension demo
 ```
 
----
-
-## 🔧 **Development Commands**
+### **Paymaster Service Testing**
 
 ```bash
-# 🚀 Development
-npm run dev              # Start Next.js development server
-npm run build            # Build for production
-npm run start            # Start production server
-npm run lint             # Run ESLint
+# Local testing
+cd paymaster-service
+npm start
 
-# 🏗️ Smart Contract
-scarb build              # Build Cairo contract
-snforge test             # Run contract tests
-scarb fmt                # Format Cairo code
+# Health check
+curl https://tipmeme-paymaster.onrender.com/health
 
-# 🌐 Extension Development
-# 1. Load chrome-extension/ folder in Chrome DevTools
-# 2. Use debug-wallets.html for wallet testing
-# 3. Check console for detailed logging
-# 4. Reload extension after changes: chrome://extensions/
+# Test sponsorship (requires valid transaction)
+curl -X POST https://tipmeme-paymaster.onrender.com/sponsor \
+  -H "Content-Type: application/json" \
+  -d '{"transaction": "...", "signature": "..."}'
 ```
 
 ---
 
-## 📊 **Latest Updates (January 2025)**
+## 🚀 **Deployment**
 
-### **🎯 Configuration & Contract Integration** ✅
-- **Centralized Configuration**: 
-  - `chrome-extension/config.js` for extension settings
-  - `lib/contract-config.ts` for dashboard settings
-- **Contract Integration**: All components now use deployed contract
-- **Working Wallet Detection**: Fixed ArgentX and Braavos integration
+### **Prerequisites**
+- Node.js 18+
+- Git
+- Vercel CLI
+- Chrome Browser (for extension)
 
-### **🐛 Bug Fixes & Improvements** ✅
-- **Fixed Extension Demo**: Resolved SSR issues with Next.js
-- **CSS Selector Fix**: Removed invalid `:has-text()` selectors
-- **Wallet Connection**: Improved reliability and error handling
-- **UI Consistency**: Updated contract addresses across all components
+### **Frontend Deployment (Vercel)**
+```bash
+# Deploy to Vercel
+vercel --prod
 
-### **🛠️ Development Experience**
-- **Better Error Handling**: Clear error messages and debugging info
-- **Updated README**: Comprehensive setup and testing instructions
-- **Working Development Setup**: All services properly configured
+# Environment variables required:
+NEXT_PUBLIC_CONTRACT_ADDRESS=0x072a452b7469b98df2f4cdc7677b160b4f71fd3c9d8a24a93662e4ee63e2db9e
+NEXT_PUBLIC_STARKNET_NETWORK=testnet
+NEXT_PUBLIC_STARKNET_CHAIN_ID=0x534e5f5345504f4c4941
+NEXT_PUBLIC_PAYMASTER_ENABLED=true
+```
 
----
+### **Paymaster Service Deployment (Render.com)**
+```bash
+# Deploy via Docker on Render.com
+# Required environment variables:
+STARKNET_RPC_URL=https://starknet-sepolia.public.blastapi.io/rpc/v0_8
+PAYMASTER_PRIVATE_KEY=your_private_key_here
+NODE_ENV=production
+PORT=10000
+```
 
-## 🔗 **Important Links**
+### **Chrome Extension Deployment**
+```bash
+# Package extension
+zip -r tipmeme-extension.zip chrome-extension/
 
-- 📊 **Contract Explorer**: [Starkscan](https://sepolia.starkscan.co/contract/0x072a452b7469b98df2f4cdc7677b160b4f71fd3c9d8a24a93662e4ee63e2db9e)
-- 🎮 **Extension Demo**: [http://localhost:3000/extension-demo](http://localhost:3000/extension-demo)
-- 📈 **Creator Dashboard**: [http://localhost:3000](http://localhost:3000)
-- 🦊 **ArgentX Wallet**: [Chrome Store](https://chrome.google.com/webstore/detail/argent-x/dlcobpjiigpikoobohmabehhmhfoodbb)
-- 🛡️ **Braavos Wallet**: [Chrome Store](https://chrome.google.com/webstore/detail/braavos-starknet-wallet/jnlgamecbpmbajjfhmmmlhejkemejdma)
-- 💧 **STRK Faucet**: [Get Test Tokens](https://starknet-faucet.vercel.app/)
-- 🌐 **Starknet Docs**: [Documentation](https://docs.starknet.io/)
-
----
-
-## 🚦 **Status Overview**
-
-| Component | Status | Description |
-|-----------|--------|-------------|
-| 🎯 Smart Contract | ✅ Working | Deployed on Starknet Sepolia |
-| 🌐 Chrome Extension | ✅ Working | Wallet integration complete |
-| 📊 Creator Dashboard | ✅ Working | Full wallet & contract integration |
-| 🎮 Extension Demo | ✅ Working | Live preview functionality |
-| 🔐 Wallet Connection | ✅ Working | ArgentX & Braavos supported |
-| ⚙️ Configuration | ✅ Working | Centralized config system |
+# Install in Chrome
+1. chrome://extensions/
+2. Developer mode ON
+3. Load unpacked → select chrome-extension folder
+```
 
 ---
 
-## 🤝 **Contributing**
+## 📞 **Support & Contact**
 
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Commit changes**: `git commit -m 'Add amazing feature'`
-4. **Push to branch**: `git push origin feature/amazing-feature`
-5. **Open a Pull Request**
+- **GitHub Issues**: [Report bugs or request features](https://github.com/big14way/Tipmeme/issues)
+- **Documentation**: Comprehensive guides included in repository
+- **Live Demo**: Test all features on our live deployment
 
 ---
 
-## 📄 **License**
+## 📜 **License**
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 **Acknowledgments**
-
-- **Starknet**: For the amazing Layer 2 blockchain technology
-- **Cairo**: For the expressive smart contract language
-- **ArgentX & Braavos**: For excellent Starknet wallet support
-- **Radix UI**: For beautiful, accessible UI components
-- **shadcn/ui**: For the component design system
+MIT License - see LICENSE file for details.
 
 ---
 
-**🎉 Ready to revolutionize social media tipping? Let's build the future together!**
+## 🎯 **What's Next**
 
-*Last updated: January 2025 - Full Platform Integration Complete ✅* 
+- **📱 Mobile App**: React Native version for mobile tipping
+- **🌍 Multi-Platform**: Support for more social media platforms
+- **💎 NFT Integration**: Tip with NFTs and digital collectibles
+- **🏪 Creator Marketplace**: Advanced monetization tools
+- **🤖 AI Features**: Smart tip recommendations and analytics
+
+---
+
+**Built with ❤️ on Starknet** 

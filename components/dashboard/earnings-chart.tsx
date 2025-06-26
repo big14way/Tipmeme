@@ -71,7 +71,7 @@ export function EarningsChart() {
           padding: 20,
           font: {
             size: 12,
-            weight: '600',
+            weight: 'bold' as const,
           },
         },
       },
@@ -104,7 +104,7 @@ export function EarningsChart() {
         ticks: {
           font: {
             size: 12,
-            weight: '500',
+            weight: 'normal' as const,
           },
           color: '#6b7280',
         },
@@ -118,7 +118,7 @@ export function EarningsChart() {
         ticks: {
           font: {
             size: 12,
-            weight: '500',
+            weight: 'normal' as const,
           },
           color: '#6b7280',
         },
