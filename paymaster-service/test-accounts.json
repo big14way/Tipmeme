@@ -1,0 +1,26 @@
+{
+  "tipper_account": {
+    "address": "0x06622f4774d33f23a9181fe19bc4c0f09aab0a0b3d3f6bc7fdfb8fd860ac17bb",
+    "role": "tipper",
+    "description": "Account for sending tips",
+    "private_key": "SET_IN_ENV_VAR",
+    "eth_balance": "0.000002 ETH",
+    "strk_balance": "Has STRK tokens",
+    "status": "READY"
+  },
+  "creator_account": {
+    "address": "0x2625c55d1604f3b2ddc9cec02678579322cd9f191e943eb749acf78755e1f59",
+    "role": "creator", 
+    "description": "Account for receiving tips",
+    "twitter_handle": "test_creator",
+    "private_key": "SET_IN_ENV_VAR",
+    "eth_balance": "0.000499 ETH",
+    "strk_balance": "Has STRK tokens",
+    "status": "READY"
+  },
+  "tipmeme_contract": {
+    "address": "0x07a8472b469b98df2f4cdc7677b160b4f71fd3c9d8a24a93662e4ee63e2db9e",
+    "type": "contract",
+    "description": "TipMeme smart contract"
+  }
+}
