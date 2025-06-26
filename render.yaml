@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: tipmeme-paymaster
+    runtime: node
+    rootDir: ./paymaster-service
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: STARKNET_PROVIDER_URL  
+        value: https://starknet-sepolia.public.blastapi.io/rpc/v0_8
+      - key: STARKNET_CHAIN_ID
+        value: SN_SEPOLIA
+      - key: TIPMEME_CONTRACT_ADDRESS
+        value: 0x072a452b7469b98df2f4cdc7677b160b4f71fd3c9d8a24a93662e4ee63e2db9e
+      - key: PAYMASTER_ADDRESS
+        value: 0x06622f4774d33f23a9181fe19bc4c0f09aab0a0b3d3f6bc7fdfb8fd860ac17bb
+      - key: ENABLE_WHITELIST
+        value: false
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 60000
+      - key: RATE_LIMIT_MAX_REQUESTS
+        value: 10
+      - key: MAX_GAS_SPONSORSHIP_PER_TX
+        value: 0.01
+      - key: MAX_DAILY_SPONSORSHIP_PER_IP
+        value: 0.1
+      - key: MAX_DAILY_SPONSORSHIP_TOTAL
+        value: 10
+      - key: LOG_LEVEL
+        value: info
+      - key: CACHE_TTL
+        value: 300 
